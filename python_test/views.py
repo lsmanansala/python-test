@@ -7,6 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def clients(request, code=None, action=None):
+    """
+    Main view function. creating, updating and reading client data
+    """
     if request.is_ajax():
         return clients_ajax(request)
     if request.method == "POST":
@@ -45,7 +48,9 @@ def clients(request, code=None, action=None):
 
 
 def clients_ajax(request):
-
+    """
+    function for passing data to datatable
+    """
     client_list = Client.objects.all()
 
     json_data = []
@@ -69,6 +74,9 @@ def clients_ajax(request):
 
 
 def client_page(request, code=None):
+    """
+    function for showing client page
+    """
     client = get_object_or_404(Client, code=code)
 
     context = {
@@ -79,5 +87,7 @@ def client_page(request, code=None):
 
 
 def already_exists(request):
-
+    """
+    function for client already exists.
+    """
     return render(request, 'components/already_exists.html')

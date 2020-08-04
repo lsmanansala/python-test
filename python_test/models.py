@@ -26,5 +26,8 @@ class Client(models.Model):
         return self.client_name
 
     def save(self, *args, **kwargs):
+        """
+        function for creating client unique code.
+        """
         self.code = uuid.uuid4().hex[:6].upper()
         super(Client, self).save(*args, **kwargs)
