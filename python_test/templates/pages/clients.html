@@ -1,0 +1,154 @@
+{% extends 'base/index.html' %}
+
+{% block content %}
+   
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+              <h1>Clients</h1>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModalCenter">
+                    Add Client
+                </button>
+            </div>
+          </div>
+        <table id="client_table" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Client Name</th>
+                    <th>Contact Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Street</th>                           
+                    <th>Postal Code</th>
+                    <th>State</th>
+                    <th>Suburb</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                    <tr></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--Create Client Modal-->
+    <div class="modal fade" id="createModalCenter" tabindex="-1" role="dialog" aria-labelledby="createModalCenter" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Add Client</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/clients" method="POST">
+                    <div class="modal-body">
+                        
+                            {% csrf_token %}
+                                
+                            <div class="form-group">
+                                <label>Client Name</label>
+                                <input required type="text" name="client_name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input required type="email" name="email" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input required type="number" name="phone_number" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Contact Name</label>
+                                <input required type="text" name="contact_name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Street</label>
+                                <input required type="text" name="street_name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Suburb</label>
+                                <input required type="text" name="suburb_name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Postal Code</label>
+                                <input required type="text" name="post_code" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>State</label>
+                                <input required type="text" name="state" class="form-control">
+                            </div>
+                    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block extra_js %}
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+        $(document).ready( function () {
+            $('#client_table').DataTable({
+                "searching": true,
+                "paging": true,
+                "destroy": true,
+                "ajax": {
+                    "url":'/clients',
+                    'method':'POST'
+                },
+                "columns": [
+                    { 'data': 'client_name',
+                    'render' : function(data, type, row, id){
+                        data = '<a href="/clients/'+ row['code'] +'">' + data + '</a>';
+                        return data;
+                    } },
+                    { "data": "contact_name" },
+                    { "data": "email" },
+                    { "data": "phone_number" },
+                    { "data": "street_name" },
+                    { "data": "post_code" },
+                    { "data": "state" },
+                    { "data": "suburb_name" },
+                ]
+            });
+        } );
+
+
+    </script>
+    {% endblock %}
+<!-- 
+    <div>
+        <form action="/clients" method="POST">
+            {% csrf_token %}
+                
+            <div class="form-group">
+                <label>Client Name</label>
+                <input required type="text" name="client_name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input required type="text" name="email" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input required type="number" name="phone_number" class="form-control">
+            </div>
+            
+            <button class="btn btn-primary" type="submit">Add</button>
+        </form>
+    </div> -->
+
+{% endblock %}
